@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import com.stackroute.newz.model.News;
-import com.stackroute.newz.model.Newssource;
+import com.stackroute.newz.model.NewsSource;
 import com.stackroute.newz.model.Reminder;
 import com.stackroute.newz.model.UserNews;
 import com.stackroute.newz.repository.NewsRepository;
@@ -28,7 +28,7 @@ public class NewsRepositoryTest {
     private NewsRepository newsRepository;
 
     private News news;
-    private Newssource newssource;
+    private NewsSource newssource;
     private Reminder reminder;
     private UserNews userNews = new UserNews();
     
@@ -38,13 +38,13 @@ public class NewsRepositoryTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-    	newssource = new Newssource();
+    	newssource = new NewsSource();
         
-        newssource.setNewssourceId("1");
-        newssource.setNewssourceName("Cricket-Category");
-        newssource.setNewssourceDesc("All about IPL");
-        newssource.setNewssourceCreatedBy("Becky123");
-        newssource.setNewssourceCreationDate();
+        newssource.setNewsSourceId("1");
+        newssource.setNewsSourceName("Cricket-Category");
+        newssource.setNewsSourceDesc("All about IPL");
+        newssource.setNewsSourceCreatedBy("Becky123");
+        newssource.setNewsSourceCreationDate();
 
         reminder = new Reminder();
         reminder.setReminderId("5b0509731764e3096984eae6");
@@ -60,7 +60,7 @@ public class NewsRepositoryTest {
         news.setUrl("//CSKIndiansVcRCB.html");
         news.setUrlToImage("//CSKIndiansVcRCB.png");
         news.setReminder(reminder);
-        news.setNewssource(newssource);
+        news.setNewsSource(newssource);
         
         newsList = new ArrayList<>();
         newsList.add(news);

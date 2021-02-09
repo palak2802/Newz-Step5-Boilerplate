@@ -2,7 +2,7 @@ package com.stackroute.newz.model;
 
 import java.util.Date;
 
-public class Newssource {
+public class NewsSource {
 	
 	/*
 	 * This class should have five fields
@@ -14,43 +14,43 @@ public class Newssource {
 	 */
 	
 
-	public String getNewssourceId() {
+	public String getNewsSourceId() {
 		return null;
 	}
 
-	public void setNewssourceId(String newssourceId) {
+	public void setNewsSourceId(String newssourceId) {
 
 	}
 
-	public String getNewssourceName() {
+	public String getNewsSourceName() {
 		return null;
 	}
 
-	public void setNewssourceName(String newssourceName) {
+	public void setNewsSourceName(String newssourceName) {
 	
 	}
 
-	public String getNewssourceDesc() {
+	public String getNewsSourceDesc() {
 		return null;
 	}
 
-	public void setNewssourceDesc(String newssourceDesc) {
+	public void setNewsSourceDesc(String newssourceDesc) {
 		
 	}
 
-	public String getNewssourceCreatedBy() {
+	public String getNewsSourceCreatedBy() {
 		return null;
 	}
 
-	public void setNewssourceCreatedBy(String newssourceCreatedBy) {
+	public void setNewsSourceCreatedBy(String newssourceCreatedBy) {
 		
 	}
 
-	public Date getNewssourceCreationDate() {
+	public Date getNewsSourceCreationDate() {
 		return null;
 	}
 
-	public void setNewssourceCreationDate() {
+	public void setNewsSourceCreationDate() {
 
 	}
 

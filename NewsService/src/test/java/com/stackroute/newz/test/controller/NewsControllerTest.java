@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.newz.controller.NewsController;
-import com.stackroute.newz.util.exception.NewsNotFoundExeption;
-import com.stackroute.newz.model.Newssource;
+import com.stackroute.newz.util.exception.NewsNotFoundException;
+import com.stackroute.newz.model.NewsSource;
 import com.stackroute.newz.model.News;
 import com.stackroute.newz.model.Reminder;
 import com.stackroute.newz.service.NewsService;
@@ -41,7 +41,7 @@ class NewsControllerTest {
     @MockBean
     private News news;
     @MockBean
-    private Newssource newssource;
+    private NewsSource newssource;
     @MockBean
     private Reminder reminder;
     @MockBean
@@ -57,13 +57,13 @@ class NewsControllerTest {
 
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(newsController).build();
-        newssource = new Newssource();
+        newssource = new NewsSource();
         
-        newssource.setNewssourceId("CNN01");
-        newssource.setNewssourceName("CNN");
-        newssource.setNewssourceDesc("CNN - US");
-        newssource.setNewssourceCreatedBy("Becky123");
-        newssource.setNewssourceCreationDate();
+        newssource.setNewsSourceId("CNN01");
+        newssource.setNewsSourceName("CNN");
+        newssource.setNewsSourceDesc("CNN - US");
+        newssource.setNewsSourceCreatedBy("Becky123");
+        newssource.setNewsSourceCreationDate();
 
         reminder = new Reminder();
         reminder.setReminderId("5b0509731764e3096984eae6");
@@ -82,7 +82,7 @@ class NewsControllerTest {
         news.setUrl("//CSKIndiansVcRCB.html");
         news.setUrlToImage("//CSKIndiansVcRCB.png");
         news.setReminder(reminder);
-        news.setNewssource(newssource);
+        news.setNewsSource(newssource);
 
         newsList = new ArrayList<>();
         newsList.add(news);
@@ -148,7 +148,7 @@ class NewsControllerTest {
     @Test
     public void deleteAllNewsFailure() throws Exception {
 
-        when(newsService.deleteAllNews("Becky123")).thenThrow(NewsNotFoundExeption.class);
+        when(newsService.deleteAllNews("Becky123")).thenThrow(NewsNotFoundException.class);
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/news/Becky123")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -173,7 +173,7 @@ class NewsControllerTest {
     @Test
     public void updateNewsFailure() throws Exception {
 
-        when(newsService.updateNews(any(), eq(news.getNewsId()), eq("Becky123"))).thenThrow(NewsNotFoundExeption.class);
+        when(newsService.updateNews(any(), eq(news.getNewsId()), eq("Becky123"))).thenThrow(NewsNotFoundException.class);
         news.setContent("Mumbai Indians vs RCB match scheduled  for 6 PM");
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/news/Becky123/" + news.getNewsId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -197,7 +197,7 @@ class NewsControllerTest {
     @Test
     public void getNewsByIdFailure() throws Exception {
 
-        when(newsService.getNewsByNewsId("Becky123", 1)).thenThrow(NewsNotFoundExeption.class);
+        when(newsService.getNewsByNewsId("Becky123", 1)).thenThrow(NewsNotFoundException.class);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/news/Becky123/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())

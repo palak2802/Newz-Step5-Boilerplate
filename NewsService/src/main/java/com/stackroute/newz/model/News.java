@@ -86,11 +86,11 @@ public class News {
 		
 	}
 
-	public Newssource getNewssource() {
+	public NewsSource getNewsSource() {
 		return null;
 	}
 
-	public void setNewssource(Newssource newssource) {
+	public void setNewsSource(NewsSource newsSource) {
 
 	}
 
