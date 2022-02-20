@@ -1,6 +1,12 @@
 package com.stackroute.userprofile.service;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.stackroute.userprofile.model.UserProfile;
+import com.stackroute.userprofile.repository.UserProfileRepository;
 import com.stackroute.userprofile.util.exception.UserProfileAlreadyExistsException;
 import com.stackroute.userprofile.util.exception.UserProfileNotFoundException;
 
@@ -13,7 +19,7 @@ import com.stackroute.userprofile.util.exception.UserProfileNotFoundException;
 * better. Additionally, tool support and additional behavior might rely on it in the 
 * future.
 * */
-
+@Service
 public class UserProfileServiceImpl implements UserProfileService {
 
 	/*
@@ -21,14 +27,25 @@ public class UserProfileServiceImpl implements UserProfileService {
 	 * Constructor-based autowiring) Please note that we should not create any
 	 * object using the new keyword.
 	 */
-
+	private UserProfileRepository userProfileRepo;
+	@Autowired
+	public UserProfileServiceImpl(UserProfileRepository userProfileRepository) {
+		this.userProfileRepo = userProfileRepository;
+	}
+	
 	/*
-	 * This method should be used to save a new userprofile.Call the corresponding method
-	 * of Respository interface.
+	 * This method should be used to save a new userprofile. Call the corresponding method
+	 * of Repository interface.
 	 */
 
     public UserProfile registerUser(UserProfile user) throws UserProfileAlreadyExistsException {
-        return null;
+		Boolean userProfileById = userProfileRepo.existsById(user.getUserId());
+    	if(userProfileById == false) {
+    		UserProfile userProfile = userProfileRepo.insert(user);
+    		if(userProfile != null)
+    			return userProfile;
+    	}
+        throw new UserProfileAlreadyExistsException("User Profile with user ID: "+user.getUserId()+ " already exists in DB.");
     }
 
 	/*
@@ -38,7 +55,17 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile updateUser(String userId, UserProfile user) throws UserProfileNotFoundException {
-    	return null;
+    	UserProfile userProfileById = userProfileRepo.findById(userId).get();
+    	if(userProfileById != null) {
+    		userProfileById.setFirstName(user.getFirstName());
+    		userProfileById.setLastName(user.getLastName());
+    		userProfileById.setContact(user.getContact());
+    		userProfileById.setEmail(user.getEmail());
+    		userProfileRepo.save(userProfileById);
+    		UserProfile userProfile = userProfileRepo.findById(userId).get();
+    		return userProfile;
+    	}
+        throw new UserProfileNotFoundException("User Profile with user ID: "+userId+ " does not found in DB.");
     }
 
 	/*
@@ -48,7 +75,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public boolean deleteUser(String userId) throws UserProfileNotFoundException {
-        return false;
+    	UserProfile userProfileById = userProfileRepo.findById(userId).get();
+    	if(userProfileById != null) {
+    		userProfileRepo.deleteById(userId);
+    		return true;
+    	}
+        throw new UserProfileNotFoundException("User Profile with user ID: "+userId+ " does not found in DB.");
     }
     
 	/*
@@ -58,6 +90,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile getUserById(String userId) throws UserProfileNotFoundException {
-    	return null;
+    	UserProfile userProfileById = userProfileRepo.findById(userId).get();
+    	if(userProfileById != null) {
+    		return userProfileById;
+    	}
+        throw new UserProfileNotFoundException("User Profile with user ID: "+userId+ " does not found in DB.");
     }
 }

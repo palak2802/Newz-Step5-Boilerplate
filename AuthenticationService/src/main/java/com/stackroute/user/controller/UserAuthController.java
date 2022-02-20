@@ -1,6 +1,28 @@
 package com.stackroute.user.controller;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.stackroute.user.model.User;
 import com.stackroute.user.service.UserAuthService;
+import com.stackroute.user.util.exception.UserAlreadyExistsException;
+import com.stackroute.user.util.exception.UserNotFoundException;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /*
  * As in this assignment, we are working on creating RESTful web service, hence annotate
@@ -10,7 +32,8 @@ import com.stackroute.user.service.UserAuthService;
  * format. Starting from Spring 4 and above, we can use @RestController annotation which 
  * is equivalent to using @Controller and @ResposeBody annotation
  */
-
+@RestController
+@RequestMapping("/api/v1/auth")
 public class UserAuthController {
 
     /*
@@ -18,9 +41,15 @@ public class UserAuthController {
 	 * autowiring) Please note that we should not create an object using the new
 	 * keyword
 	 */
-
+	static final long EXPIRATIONTIME = 300000;
+	private Map<String, String> map = new HashMap<>();
+	@Autowired
+	private UserAuthService userAuthService;
+	
     public UserAuthController(UserAuthService userAuthService) {
+    	this.userAuthService = userAuthService;
 	}
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /*
 	 * Define a handler method which will create a specific user by reading the
@@ -33,7 +62,26 @@ public class UserAuthController {
 	 * 
 	 * This handler method should map to the URL "/api/v1/auth/register" using HTTP POST method
 	 */
-
+    @PostMapping("/register")
+	public ResponseEntity<User> registerUser(@RequestBody User user) throws UserNotFoundException{
+    	try {
+    		User userById = userAuthService.findByUserIdAndPassword(user.getUserId(), user.getPassword());
+    		if(userById == null) {
+    			userAuthService.saveUser(user);
+    			logger.info("In controller - {}", "User is registered successfully.");
+    			return new ResponseEntity<User>(user, HttpStatus.CREATED);
+    		}
+    	}catch(UserAlreadyExistsException e) {
+    		logger.info("In controller - {}", "User already exists.");
+    		return new ResponseEntity<User>(HttpStatus.CONFLICT);
+    	} 
+//    	catch (UserNotFoundException e) {
+//    		logger.info("In controller - {}", "User not found.");
+//    		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+//		}
+    	logger.info("In controller - {}", "User already exists.");
+    	return new ResponseEntity<User>(HttpStatus.CONFLICT);
+	}
 
 	/* 
 	 * Define a handler method which will authenticate a user by reading the Serialized user
@@ -48,7 +96,45 @@ public class UserAuthController {
 	 * 
 	 * This handler method should map to the URL "/api/v1/auth/login" using HTTP POST method
 	*/
+    @PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody User user) throws ServletException{
+    	String jwtToken = "";
+    	try {
+    		jwtToken = getToken(user.getUserId(), user.getPassword());
+    		map.clear();
+    		map.put("message", "user successfully logged in");
+    		map.put("token", jwtToken);
+    	}
+    	catch(Exception e) {
+    		String exceptionMsg = e.getMessage();
+    		map.clear();
+    		map.put("token", null);
+    		map.put("message", exceptionMsg);
+    		logger.info("In controller - {}", "Unauthorized User.");
+    		return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
+    	}
+    	logger.info("In controller - {}", "Authorized User.");
+    	return new ResponseEntity<>(map, HttpStatus.OK);
+	}
     
-
-
+    public String getToken(String userName, String password) throws Exception{
+    	if(userName == null || password == null) {
+    		throw new ServletException("Please fill in username and password.");
+    	}
+    	
+    	User isUserExists = userAuthService.findByUserIdAndPassword(userName, password);
+    	
+    	if(isUserExists == null ) {
+    		throw new ServletException("Invalid Credentials.");
+    	}
+    	
+    	String jwtToken = Jwts.builder().setSubject(userName)
+    			.setIssuedAt(new Date())
+    			.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
+    			.signWith(SignatureAlgorithm.HS256, "secretkey")
+    			.compact();
+    	
+    	logger.info("In controller - {}", "JWT Token created Successfully.");
+    	return jwtToken;
+    }
 }

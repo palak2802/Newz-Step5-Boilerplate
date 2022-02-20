@@ -1,7 +1,5 @@
 package com.stackroute.userprofile.service;
 
-
-
 import com.stackroute.userprofile.model.UserProfile;
 import com.stackroute.userprofile.util.exception.UserProfileAlreadyExistsException;
 import com.stackroute.userprofile.util.exception.UserProfileNotFoundException;

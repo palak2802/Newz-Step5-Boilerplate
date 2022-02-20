@@ -12,8 +12,6 @@ import com.stackroute.userprofile.jwtfilter.JwtFilter;
  * and @ComponentScan with their default attributes
  */
 
-
-
 @SpringBootApplication
 public class UserProfileServiceApplication {
 
@@ -23,10 +21,12 @@ public class UserProfileServiceApplication {
 	 * Also specifies the Url patterns for registration bean.
 	 */
 
-
     @Bean
     public FilterRegistrationBean<JwtFilter> jwtFilter() {
-        return null;
+    	final FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<JwtFilter>();
+    	registrationBean.setFilter(new JwtFilter());
+    	registrationBean.addUrlPatterns("/api/*");
+    	return registrationBean;
     }
     
 	/*

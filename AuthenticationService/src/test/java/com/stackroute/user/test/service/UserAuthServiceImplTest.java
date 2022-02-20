@@ -45,9 +45,7 @@ public class UserAuthServiceImplTest {
         Mockito.when(userAuthRepository.save(user)).thenReturn(user);
         boolean flag = userAuthServiceImpl.saveUser(user);
         assertEquals(true, flag);
-
     }
-
 
     @Test
     public void testSaveUserFailure() {
