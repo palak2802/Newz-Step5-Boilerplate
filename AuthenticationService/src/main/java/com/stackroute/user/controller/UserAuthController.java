@@ -75,10 +75,6 @@ public class UserAuthController {
     		logger.info("In controller - {}", "User already exists.");
     		return new ResponseEntity<User>(HttpStatus.CONFLICT);
     	} 
-//    	catch (UserNotFoundException e) {
-//    		logger.info("In controller - {}", "User not found.");
-//    		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-//		}
     	logger.info("In controller - {}", "User already exists.");
     	return new ResponseEntity<User>(HttpStatus.CONFLICT);
 	}

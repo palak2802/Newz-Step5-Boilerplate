@@ -59,11 +59,11 @@ public class NewsSourceController {
 	@PostMapping("/newssource")
 	public ResponseEntity<NewsSource> createNewsSource(@RequestBody NewsSource newssource){
 		
-		NewsSource newsSourceById;
+//		NewsSource newsSourceById;
 		try {
-			newsSourceById = newsSourceService.getNewsSourceById(newssource.getNewsSourceCreatedBy(), newssource.getNewsSourceId());
-			if(newsSourceById == null) {
-				newsSourceService.addNewsSource(newssource);
+//			newsSourceById = newsSourceService.getNewsSourceById(newssource.getNewsSourceCreatedBy(), newssource.getNewsSourceId());
+			boolean isNewsSourceExists = newsSourceService.addNewsSource(newssource);
+				if(isNewsSourceExists == true) {
 				logger.info("In controller - {}", "News Source created: " +newssource);
 				return new ResponseEntity<NewsSource>(newssource, HttpStatus.CREATED);
 			}
@@ -89,13 +89,14 @@ public class NewsSourceController {
 	 * 
 	 */
 	@DeleteMapping("/newssource/{newssourceId}")
-	public ResponseEntity<NewsSource> deleteNewsSource(@PathVariable("newssourceId") int newssourceId, @RequestBody NewsSource newssource){
+	public ResponseEntity<NewsSource> deleteNewsSource(@PathVariable("newssourceId") int newssourceId){
 		
-		NewsSource newsSourceById;
+//		NewsSource newsSourceById;
 		try {
-			newsSourceById = newsSourceService.getNewsSourceById(newssource.getNewsSourceCreatedBy(), newssourceId);
-			if(newsSourceById != null) {
-				newsSourceService.deleteNewsSource(newssourceId);
+//			newsSourceById = newsSourceService.getNewsSourceById(newssource.getNewsSourceCreatedBy(), newssourceId);
+//			if(newsSourceById != null) {
+			boolean isnewsSourceDeleted = newsSourceService.deleteNewsSource(newssourceId);
+			if(isnewsSourceDeleted == true) {
 				logger.info("In controller - {}", "News Source with ID: "+newssourceId+" deleted.");
 				return new ResponseEntity<NewsSource>(HttpStatus.OK);
 			}
@@ -122,11 +123,12 @@ public class NewsSourceController {
 	@PutMapping("/newssource/{newssourceId}")
 	public ResponseEntity<NewsSource> updateNewsSource(@PathVariable("newssourceId") int newssourceId, @RequestBody NewsSource newssource){
 		
-		NewsSource newsSourceById;
+//		NewsSource newsSourceById;
 		try {
-			newsSourceById = newsSourceService.getNewsSourceById(newssource.getNewsSourceCreatedBy(), newssource.getNewsSourceId());
-			if(newsSourceById != null && newsSourceById.getNewsSourceId() == newssourceId) {
+//			newsSourceById = newsSourceService.getNewsSourceById(newssource.getNewsSourceCreatedBy(), newssource.getNewsSourceId());
+//			if(newsSourceById != null && newsSourceById.getNewsSourceId() == newssourceId) {
 				NewsSource newsSourceUpdated = newsSourceService.updateNewsSource(newssource, newssourceId);
+				if(newsSourceUpdated != null) {
 				logger.info("In controller - {}", "News Source Updated: " +newsSourceUpdated);
 				return new ResponseEntity<NewsSource>(newsSourceUpdated, HttpStatus.OK);
 			}

@@ -1,8 +1,5 @@
 package com.stackroute.userprofile.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,18 +59,15 @@ public class UserProfileController {
 	 */
 	@PostMapping("/user")
 	public ResponseEntity<UserProfile> registerUserProfile(@RequestBody UserProfile userProfile){
-		UserProfile userProfileById;
+//		UserProfile userProfileById;
 		try {
-			userProfileById = userProfileService.getUserById(userProfile.getUserId());
-			if(userProfileById.getUserId() == null) {
-				userProfileService.registerUser(userProfile);
+//			userProfileById = userProfileService.getUserById(userProfile.getUserId());
+			UserProfile userProfileRegistered = userProfileService.registerUser(userProfile);
+			if(userProfileRegistered != null) {
 				logger.info("In controller - {}", "User Profile created: " +userProfile);
 				return new ResponseEntity<UserProfile>(userProfile, HttpStatus.CREATED);
 			}
-		} catch (UserProfileNotFoundException e) {
-			return new ResponseEntity<UserProfile>(HttpStatus.NOT_FOUND);
-		}
-		catch(UserProfileAlreadyExistsException e) {
+		} catch(UserProfileAlreadyExistsException e) {
 			return new ResponseEntity<UserProfile>(HttpStatus.CONFLICT);
 		}
 		logger.info("In controller - {}", "User ID "+ userProfile.getUserId() + " already exists.");
@@ -93,11 +87,11 @@ public class UserProfileController {
 	 */
 	@PutMapping("/userprofile/{userid}")
 	public ResponseEntity<UserProfile> updateUserProfile(@PathVariable("userId") String userId, @RequestBody UserProfile userProfile){
-		UserProfile userProfileById;
+//		UserProfile userProfileById;
 		try {
-			userProfileById = userProfileService.getUserById(userId);
-			if(userProfileById.getUserId() != null) {
-				UserProfile updatedProfile = userProfileService.updateUser(userId, userProfile);
+//			userProfileById = userProfileService.getUserById(userId);
+			UserProfile updatedProfile = userProfileService.updateUser(userId, userProfile);
+			if(updatedProfile != null) {
 				logger.info("In controller - {}", "User Profile updated: " +updatedProfile);
 				return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
 			}
@@ -122,11 +116,12 @@ public class UserProfileController {
 	 */
 	@DeleteMapping("/userprofile/{userid}")
 	public ResponseEntity<UserProfile> deleteUserProfile(@PathVariable("userId") String userId){
-		UserProfile userProfileById;
+//		UserProfile userProfileById;
 		try {
-			userProfileById = userProfileService.getUserById(userId);
-			if(userProfileById.getUserId() != null) {
-				userProfileService.deleteUser(userId);
+//			userProfileById = userProfileService.getUserById(userId);
+			
+			boolean isUserProfileDeleted = userProfileService.deleteUser(userId);
+			if(isUserProfileDeleted == true) {
 				logger.info("In controller - {}", "User Profile deleted for user ID: "+userId);
 				return new ResponseEntity<UserProfile>(HttpStatus.OK);
 			}
@@ -149,11 +144,11 @@ public class UserProfileController {
 	 */
 	@GetMapping("/userprofile/{userid}")
 	public ResponseEntity<UserProfile> getUserProfile(@PathVariable("userId") String userId){
-		UserProfile userProfileById;
+//		UserProfile userProfileById;
 		try {
-			userProfileById = userProfileService.getUserById(userId);
-			if(userProfileById.getUserId() != null) {
-				userProfileService.getUserById(userId);
+//			userProfileById = userProfileService.getUserById(userId);
+			UserProfile userProfileById = userProfileService.getUserById(userId);
+			if(userProfileById != null) {
 				logger.info("In controller - {}", "User Profile retrieved for user ID: "+userId+ "is: "+userProfileById);
 				return new ResponseEntity<UserProfile>(userProfileById, HttpStatus.OK);
 			}

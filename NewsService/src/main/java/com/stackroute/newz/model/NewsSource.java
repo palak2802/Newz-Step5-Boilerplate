@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 @Document
 public class NewsSource {
 	
@@ -17,10 +20,11 @@ public class NewsSource {
 	 * always initialized with the system date.
 	 */
 	@Id
-	private Integer newsSourceId;
+	private String newsSourceId;
 	private String newsSourceName;
 	private String newsSourceDesc;
 	private String newsSourceCreatedBy;
+	@JsonSerialize(using = ToStringSerializer.class) 
 	private LocalDateTime newsSourceCreationDate;
 	
 	public NewsSource() {
@@ -28,7 +32,7 @@ public class NewsSource {
 		this.newsSourceCreationDate = LocalDateTime.now();
 	}
 	
-	public NewsSource(Integer newsSourceId, String newsSourceName, String newsSourceDesc, String newsSourceCreatedBy,
+	public NewsSource(String newsSourceId, String newsSourceName, String newsSourceDesc, String newsSourceCreatedBy,
 			LocalDateTime newsSourceCreationDate) {
 		super();
 		this.newsSourceId = newsSourceId;
@@ -37,11 +41,11 @@ public class NewsSource {
 		this.newsSourceCreatedBy = newsSourceCreatedBy;
 	}
 
-	public Integer getNewsSourceId() {
+	public String getNewsSourceId() {
 		return newsSourceId;
 	}
 
-	public void setNewsSourceId(Integer newsSourceId) {
+	public void setNewsSourceId(String newsSourceId) {
 		this.newsSourceId = newsSourceId;
 	}
 
