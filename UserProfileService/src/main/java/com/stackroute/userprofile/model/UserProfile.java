@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 /*
  * Please note that this class is annotated with @Document annotation
  * @Document identifies a domain object to be persisted to MongoDB.
@@ -28,6 +31,7 @@ public class UserProfile {
 	private String lastName;
 	private String contact;
 	private String email;
+	@JsonSerialize(using = ToStringSerializer.class)
 	private LocalDateTime createdAt;
 	
     public UserProfile() {
