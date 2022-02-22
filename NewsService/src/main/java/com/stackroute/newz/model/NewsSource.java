@@ -20,7 +20,7 @@ public class NewsSource {
 	 * always initialized with the system date.
 	 */
 	@Id
-	private String newsSourceId;
+	private int newsSourceId;
 	private String newsSourceName;
 	private String newsSourceDesc;
 	private String newsSourceCreatedBy;
@@ -32,7 +32,7 @@ public class NewsSource {
 		this.newsSourceCreationDate = LocalDateTime.now();
 	}
 	
-	public NewsSource(String newsSourceId, String newsSourceName, String newsSourceDesc, String newsSourceCreatedBy,
+	public NewsSource(int newsSourceId, String newsSourceName, String newsSourceDesc, String newsSourceCreatedBy,
 			LocalDateTime newsSourceCreationDate) {
 		super();
 		this.newsSourceId = newsSourceId;
@@ -41,11 +41,11 @@ public class NewsSource {
 		this.newsSourceCreatedBy = newsSourceCreatedBy;
 	}
 
-	public String getNewsSourceId() {
+	public int getNewsSourceId() {
 		return newsSourceId;
 	}
 
-	public void setNewsSourceId(String newsSourceId) {
+	public void setNewsSourceId(int newsSourceId) {
 		this.newsSourceId = newsSourceId;
 	}
 

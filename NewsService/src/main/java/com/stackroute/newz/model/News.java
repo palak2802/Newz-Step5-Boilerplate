@@ -127,7 +127,7 @@ public class News {
 		return newsSource;
 	}
 
-	public void setNewsSource(NewsSource newsSource) {
+	public void setNewssource(NewsSource newsSource) {
 		this.newsSource = newsSource;
 	}
 

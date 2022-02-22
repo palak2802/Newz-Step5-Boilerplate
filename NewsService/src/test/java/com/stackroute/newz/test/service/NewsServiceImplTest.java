@@ -49,7 +49,7 @@ public class NewsServiceImplTest {
 
         newssource = new NewsSource();
         
-        newssource.setNewsSourceId("1");
+        newssource.setNewsSourceId(1);
         newssource.setNewsSourceName("Cricket-Category");
         newssource.setNewsSourceDesc("All about IPL");
         newssource.setNewsSourceCreatedBy("Becky123");
@@ -69,7 +69,7 @@ public class NewsServiceImplTest {
         news.setUrl("//CSKVsRCB.html");
         news.setUrlToImage("//CSKVsRCB.png");
         news.setReminder(reminder);
-        news.setNewsSource(newssource);
+        news.setNewssource(newssource);
 
         newsList = new ArrayList<>();
         newsList.add(news);

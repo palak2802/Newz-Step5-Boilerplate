@@ -59,7 +59,7 @@ class NewsControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(newsController).build();
         newssource = new NewsSource();
         
-        newssource.setNewsSourceId("CNN01");
+        newssource.setNewsSourceId(1);
         newssource.setNewsSourceName("CNN");
         newssource.setNewsSourceDesc("CNN - US");
         newssource.setNewsSourceCreatedBy("Becky123");
@@ -82,7 +82,7 @@ class NewsControllerTest {
         news.setUrl("//CSKIndiansVcRCB.html");
         news.setUrlToImage("//CSKIndiansVcRCB.png");
         news.setReminder(reminder);
-        news.setNewsSource(newssource);
+        news.setNewssource(newssource);
 
         newsList = new ArrayList<>();
         newsList.add(news);
